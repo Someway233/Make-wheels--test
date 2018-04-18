@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+
+  <style type="text/css">
+    .center{
+      display: flex;
+      display: -webkit-flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+    }
+    html,body,.gua{
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      border-radius:20px;
+    }
+
+    .frame{
+      position: relative;
+      height: 65px;
+      width:600px;
+      border-radius:20px;
+    }
+    .juxing{
+      background: rgb(4, 171, 239);
+      height: 60px;
+      width:400px;
+      border-radius:20px;
+    }
+    .year{
+       color: white;
+       font-size: 50px;
+      
+       margin-left: 100px; 
+    }
+  .number{
+    color: rgb(8, 8, 104);
+    position: absolute;
+    font-size: 55px;
+    margin-top: -10px;
+    margin-left: 200px;
+  }
+    .frame div,.frame canvas{
+      position: absolute;
+    }
+ 
+  </style>
+</head>
+<body>
+     <div class="gua center">
+       <div class="frame" >
+        <div class="juxing" style="border:2px solid rgb(8, 6, 99);"><span class="year">2006</span> <span class="number">22100</span></div>
+        <canvas class="mount"></canvas>        
+       </div>
+     </div>
+
+
+</body>
+<script type="text/javascript">
+   var canvas=document.querySelector("canvas"),
+       getpen=canvas.getContext("2d");
+   canvas.width=600;
+   canvas.height=65;
+   getpen.fillStyle="rgb(186, 174, 135)";
+   getpen.fillRect(0,0,600,65);
+    var mousedown=false;
+    function eventDown(e){
+        e.preventDefault();
+        mousedown=true;
+    }
+
+    function eventUp(e){
+        e.preventDefault();
+        mousedown=false;
+    }
+
+    function eventMove(e){
+        e.preventDefault();
+        if (mousedown) {
+             if (e.changedTouches) {
+                e=e.changedTouches[0];
+             }
+             var x=(e.clientX+document.body.scrollLeft||e.pageX)-getLeft(canvas)||0,
+                y=(e.clientY+document.body.scrollTop||e.pageY)-getTop(canvas)||0;
+             
+
+             with(getpen){
+                beginPath();
+                arc(x,y,70,0,Math.PI*2);
+                fill();
+             }
+        }
+
+    }
+
+    function getTop(e){
+      var setTop=e.offsetTop;
+      if(e.offsetParent!=null){
+        setTop+=getTop(e.offsetParent);
+      }
+      return setTop;
+    }
+
+    function getLeft(e){
+      var setLeft=e.offsetLeft;
+      if(e.offsetParent!=null){
+        setLeft+=getLeft(e.offsetParent);
+      }
+      return setLeft;
+    }
+   canvas.addEventListener("touchstart",eventDown);
+   canvas.addEventListener("touchend",eventUp);
+   canvas.addEventListener("touchmove",eventMove);
+
+   canvas.addEventListener("mousedown",eventDown);
+   canvas.addEventListener("mouseup",eventUp);
+   canvas.addEventListener("mousemove",eventMove);
+
+   getpen.globalCompositeOperation="destination-out";
+</script>
+</html>
